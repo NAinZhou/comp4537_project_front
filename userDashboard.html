@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Dashboard</title>
+    <!-- Add your CSS here -->
+    <style>
+      #response {
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Welcome, User!</h1>
+    <form id="text-form">
+      <label for="text-input">Enter Text:</label><br />
+      <textarea id="text-input" name="text" rows="4" cols="50"></textarea><br />
+      <button type="submit">Submit</button>
+    </form>
+
+    <div id="response-container">
+      <!-- Response from API will be displayed here -->
+    </div>
+    <div id="remaining-calls">
+      <!-- Remaining calls will be displayed here -->
+    </div>
+
+    <script>
+      document
+        .getElementById("text-form")
+        .addEventListener("submit", function (event) {
+          event.preventDefault(); // Prevent form submission
+          const formData = new FormData(this);
+          const token = localStorage.getItem("token"); // Retrieve the stored token
+
+          fetch("http://127.0.0.1:5000/api_call", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + token, // Include the token in the Authorization header
+            },
+            body: JSON.stringify({ text: formData.get("text") }),
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+              }
+              return response.json(); // Parse the response as JSON
+            })
+            .then((data) => {
+              // Display the generated text and remaining API calls
+              document.getElementById("response-container").innerText =
+                data.generated_text || "No response text";
+              document.getElementById(
+                "remaining-calls"
+              ).innerText = `Remaining API calls: ${data.remaining_calls}`;
+            })
+            .catch((error) => console.error("Fetch error:", error));
+        });
+    </script>
+  </body>
+</html>
