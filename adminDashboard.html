@@ -4,31 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Dashboard</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 20px;
-      }
-      h1 {
-        color: #333;
-      }
-      .user-usage {
-        margin-top: 20px;
-      }
-      table {
-        width: 100%;
-        border-collapse: collapse;
-      }
-      th,
-      td {
-        text-align: left;
-        padding: 8px;
-        border-bottom: 1px solid #ddd;
-      }
-      th {
-        background-color: #f2f2f2;
-      }
-    </style>
+    <link rel="stylesheet" href="css/adminDashboard.css" />
+    <!-- Assuming CSS file exists -->
   </head>
   <body>
     <h1>Welcome, Admin!</h1>
@@ -47,40 +24,7 @@
       </table>
     </div>
 
-    <script>
-      const fetchApiUsage = () => {
-        fetch("http://127.0.0.1:5000/api/user_usage", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("token"),
-          },
-        })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-          })
-          .then((data) => {
-            const usageTable = document
-              .getElementById("usageTable")
-              .getElementsByTagName("tbody")[0];
-            data.forEach((user) => {
-              let row = usageTable.insertRow();
-              let emailCell = row.insertCell(0);
-              let apiCallsCell = row.insertCell(1);
-              emailCell.textContent = user.email;
-              apiCallsCell.textContent = user.remaining_calls;
-            });
-          })
-          .catch((error) =>
-            console.error("Error loading API usage data:", error)
-          );
-      };
-
-      // Call the function when the page loads
-      window.onload = fetchApiUsage;
-    </script>
+    <script src="js/adminDashboard.js"></script>
+    <!-- External JS -->
   </body>
 </html>
