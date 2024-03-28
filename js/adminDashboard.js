@@ -1,5 +1,5 @@
 const fetchApiUsage = () => {
-  fetch("http://127.0.0.1:5000/api/user_usage", {
+  fetch("https://4537a01326006groupproject.online/api/user_usage", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

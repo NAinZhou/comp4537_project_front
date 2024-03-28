@@ -5,7 +5,7 @@ document
     const textInput = document.getElementById("text-input").value;
     const token = localStorage.getItem("token"); // Retrieve the stored token
 
-    fetch("http://127.0.0.1:5000/api_call", {
+    fetch("	https://4537a01326006groupproject.online/api_call", {
       // Use HTTPS
       method: "POST",
       headers: {
