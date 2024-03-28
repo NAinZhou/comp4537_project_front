@@ -14,7 +14,7 @@ class Login {
     const password = document.getElementById("loginPassword").value;
 
     // Change to HTTPS if your local setup supports it, or keep HTTP for local testing but ensure to use HTTPS in production.
-    fetch("http://127.0.0.1:5000/login", {
+    fetch("https://4537a01326006groupproject.online/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: email, password: password }),
@@ -28,7 +28,6 @@ class Login {
       .then((data) => {
         if (data.token) {
           localStorage.setItem("token", data.token);
-          // Check if the role is received correctly and redirect based on the role
           if (email === "admin@admin.com") {
             window.location.href = "adminDashboard.html";
           } else {
