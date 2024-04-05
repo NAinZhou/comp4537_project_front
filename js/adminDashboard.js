@@ -46,15 +46,14 @@ const fetchApiUsage = () => {
       return response.json();
     })
     .then((data) => {
-      const usageTableBody = document
-        .getElementById("usageTable")
-        .querySelector("tbody");
+      const usageTable = document.getElementById("usageTable");
+
       // Clear existing rows and headers
-      usageTableBody.innerHTML = "";
+      usageTable.innerHTML = "";
 
       // Check if data is empty
       if (data.length === 0) {
-        let row = usageTableBody.insertRow();
+        let row = usageTable.insertRow();
         let cell = row.insertCell(0);
         cell.textContent = "No usage data available";
         cell.colSpan = 5; // Update colspan to accommodate additional columns
@@ -62,17 +61,23 @@ const fetchApiUsage = () => {
       } else {
         // Populate table with data
         const keys = Object.keys(data[0]); // Extract keys from the first user object
-        // Add column headers
-        const headerRow = usageTableBody.insertRow();
-        keys.forEach((key) => {
-          let headerCell = document.createElement("th");
-          headerCell.textContent = key.toUpperCase(); // Convert to uppercase for consistency
-          headerRow.appendChild(headerCell);
-        });
+
+        // Add column headers if not already added
+        if (!usageTable.querySelector("thead")) {
+          const thead = usageTable.createTHead();
+          const headerRow = thead.insertRow();
+          keys.forEach((key) => {
+            let headerCell = document.createElement("th");
+            headerCell.textContent = key.toUpperCase(); // Convert to uppercase for consistency
+            headerRow.appendChild(headerCell);
+          });
+        }
+
+        const tbody = usageTable.createTBody();
 
         // Add user data
         data.forEach((user) => {
-          let row = usageTableBody.insertRow();
+          let row = tbody.insertRow();
           keys.forEach((key) => {
             let cell = row.insertCell();
             cell.textContent = user[key];
