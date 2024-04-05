@@ -15,7 +15,7 @@ class Registration {
     const email = document.getElementById("registerEmail").value;
     const password = document.getElementById("registerPassword").value;
 
-    fetch("	http://127.0.0.1:5000/register", {
+    fetch("	https://4537a01326006groupproject.online/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: email, password: password }),
