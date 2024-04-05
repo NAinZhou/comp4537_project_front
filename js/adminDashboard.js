@@ -1,11 +1,5 @@
-// frontend JavaScript code (adminDashboard.js)
-
 // Function to handle form submission for updating user information
-const updateUser = (userId, emailCell, roleCell, apiCallsCell) => {
-  const newEmail = prompt("Enter new email:", emailCell.textContent);
-  const newRole = prompt("Enter new role (admin/regular):", roleCell.textContent);
-  const newApiCalls = parseInt(prompt("Enter new API calls:", apiCallsCell.textContent));
-
+const updateUser = (userId, updatedUser) => {
   const token = localStorage.getItem("token"); // Retrieve the stored token
 
   fetch(`https://4537a01326006groupproject.online/api/update_user/${userId}`, {
@@ -14,7 +8,7 @@ const updateUser = (userId, emailCell, roleCell, apiCallsCell) => {
       "Content-Type": "application/json",
       Authorization: "Bearer " + token, // Include the token in the Authorization header
     },
-    body: JSON.stringify({ email: newEmail, role: newRole, api_calls: newApiCalls }),
+    body: JSON.stringify(updatedUser),
   })
     .then((response) => {
       if (!response.ok) {
@@ -46,9 +40,9 @@ const fetchApiUsage = () => {
       return response.json();
     })
     .then((data) => {
-      const usageTable = document.getElementById("usageTable");
+      const usageTable = document.getElementById("usageTable").querySelector("tbody");
 
-      // Clear existing rows and headers
+      // Clear existing rows
       usageTable.innerHTML = "";
 
       // Check if data is empty
@@ -62,24 +56,11 @@ const fetchApiUsage = () => {
         // Populate table with data
         const keys = Object.keys(data[0]); // Extract keys from the first user object
 
-        // Add column headers if not already added
-        if (!usageTable.querySelector("thead")) {
-          const thead = usageTable.createTHead();
-          const headerRow = thead.insertRow();
-          keys.forEach((key) => {
-            let headerCell = document.createElement("th");
-            headerCell.textContent = key.toUpperCase(); // Convert to uppercase for consistency
-            headerRow.appendChild(headerCell);
-          });
-        }
-
-        const tbody = usageTable.createTBody();
-
         // Add user data
         data.forEach((user) => {
-          let row = tbody.insertRow();
-          keys.forEach((key) => {
-            let cell = row.insertCell();
+          let row = usageTable.insertRow();
+          keys.forEach((key, index) => {
+            let cell = row.insertCell(index);
             cell.textContent = user[key];
           });
 
@@ -89,8 +70,8 @@ const fetchApiUsage = () => {
           editButton.textContent = "Edit";
           editButton.addEventListener("click", () => {
             // Replace text content with input fields for editing
-            keys.forEach((key) => {
-              row.querySelector(`td[data-key="${key}"]`).innerHTML = `<input type="text" value="${user[key]}" />`;
+            keys.forEach((key, index) => {
+              row.cells[index].innerHTML = `<input type="text" value="${user[key]}" data-key="${key}" />`;
             });
 
             // Add save button for updating the user information
@@ -98,8 +79,8 @@ const fetchApiUsage = () => {
             saveButton.textContent = "Save";
             saveButton.addEventListener("click", () => {
               const updatedUser = {};
-              keys.forEach((key) => {
-                updatedUser[key] = row.querySelector(`input[data-key="${key}"]`).value;
+              keys.forEach((key, index) => {
+                updatedUser[key] = row.cells[index].querySelector("input").value;
               });
               updateUser(user.ID, updatedUser);
             });
