@@ -49,8 +49,9 @@ const fetchApiUsage = () => {
       const usageTableBody = document
         .getElementById("usageTable")
         .querySelector("tbody");
-      // Clear existing rows
+      // Clear existing rows and headers
       usageTableBody.innerHTML = "";
+
       // Check if data is empty
       if (data.length === 0) {
         let row = usageTableBody.insertRow();
@@ -60,30 +61,42 @@ const fetchApiUsage = () => {
         cell.style.textAlign = "center";
       } else {
         // Populate table with data
+        const keys = Object.keys(data[0]); // Extract keys from the first user object
+        // Add column headers
+        const headerRow = usageTableBody.insertRow();
+        keys.forEach((key) => {
+          let headerCell = document.createElement("th");
+          headerCell.textContent = key.toUpperCase(); // Convert to uppercase for consistency
+          headerRow.appendChild(headerCell);
+        });
+
+        // Add user data
         data.forEach((user) => {
           let row = usageTableBody.insertRow();
-          let idCell = row.insertCell(0); 
-          let emailCell = row.insertCell(1);
-          let roleCell = row.insertCell(2); 
-          let apiCallsCell = row.insertCell(3);
-          let editCell = row.insertCell(4); // Cell for edit button
-          idCell.textContent = user.ID; 
-          emailCell.textContent = user.email;
-          roleCell.textContent = user.role; 
-          apiCallsCell.textContent = user.remaining_calls;
+          keys.forEach((key) => {
+            let cell = row.insertCell();
+            cell.textContent = user[key];
+          });
+
           // Add edit button
+          let editCell = row.insertCell();
           let editButton = document.createElement("button");
           editButton.textContent = "Edit";
           editButton.addEventListener("click", () => {
             // Replace text content with input fields for editing
-            emailCell.innerHTML = `<input type="text" value="${user.email}" />`;
-            roleCell.innerHTML = `<input type="text" value="${user.role}" />`;
-            apiCallsCell.innerHTML = `<input type="number" value="${user.remaining_calls}" />`;
+            keys.forEach((key) => {
+              row.querySelector(`td[data-key="${key}"]`).innerHTML = `<input type="text" value="${user[key]}" />`;
+            });
+
             // Add save button for updating the user information
             const saveButton = document.createElement("button");
             saveButton.textContent = "Save";
             saveButton.addEventListener("click", () => {
-              updateUser(user.ID, emailCell.firstChild, roleCell.firstChild, apiCallsCell.firstChild);
+              const updatedUser = {};
+              keys.forEach((key) => {
+                updatedUser[key] = row.querySelector(`input[data-key="${key}"]`).value;
+              });
+              updateUser(user.ID, updatedUser);
             });
             editCell.appendChild(saveButton);
           });
