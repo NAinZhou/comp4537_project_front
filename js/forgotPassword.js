@@ -23,7 +23,7 @@ class ForgotPassword {
   }
 
   sendResetRequest(email) {
-    fetch("https://4537a01326006groupproject.online/forgot_password", {
+    fetch("http://127.0.0.1:5000/forgot_password", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: email }),

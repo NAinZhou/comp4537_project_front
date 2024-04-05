@@ -1,5 +1,5 @@
 const fetchApiUsage = () => {
-  fetch("https://4537a01326006groupproject.online/api/user_usage", {
+  fetch("http://127.0.0.1:5000/api/user_usage", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -23,15 +23,19 @@ const fetchApiUsage = () => {
         let row = usageTableBody.insertRow();
         let cell = row.insertCell(0);
         cell.textContent = "No usage data available";
-        cell.colSpan = 2;
+        cell.colSpan = 4; // Update colspan to accommodate additional columns
         cell.style.textAlign = "center";
       } else {
         // Populate table with data
         data.forEach((user) => {
           let row = usageTableBody.insertRow();
-          let emailCell = row.insertCell(0);
-          let apiCallsCell = row.insertCell(1);
+          let idCell = row.insertCell(0); 
+          let emailCell = row.insertCell(1);
+          let roleCell = row.insertCell(2); 
+          let apiCallsCell = row.insertCell(3);
+          idCell.textContent = user.ID; 
           emailCell.textContent = user.email;
+          roleCell.textContent = user.role; 
           apiCallsCell.textContent = user.remaining_calls;
         });
       }
