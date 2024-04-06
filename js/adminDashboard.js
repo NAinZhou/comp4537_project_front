@@ -112,6 +112,38 @@ const fetchApiUsage = () => {
               }
             });
 
+                                    // Add delete button
+            let deleteCell = row.insertCell();
+            let deleteButton = document.createElement("button");
+            deleteButton.textContent = "Delete";
+            deleteButton.style.backgroundColor = "red";
+            deleteButton.style.color = "white";
+            deleteButton.addEventListener("click", () => {
+                if (confirm(`Are you sure you want to delete user ${user.email}?`)) {
+                    fetch(`https://4537a01326006groupproject.online/api/delete_user/${user.ID}`, {
+                        method: "DELETE",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: "Bearer " + localStorage.getItem("token"),
+                        },
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        alert(data.message);
+                        fetchApiUsage(); // Refresh the list to reflect the deletion
+                    })
+                    .catch(error => {
+                        console.error("Fetch error:", error);
+                    });
+                }
+            });
+            deleteCell.appendChild(deleteButton);
+            
             // Add save button for updating the user information
             const saveButton = document.createElement("button");
             saveButton.textContent = "Save";
