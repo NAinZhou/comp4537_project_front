@@ -11,6 +11,8 @@ function checkAuthorization() {
   }
 }
 
+checkAuthorization();
+
 // Function to handle form submission for updating user information
 const updateUser = (userId, updatedUser) => {
   const token = localStorage.getItem("token"); // Retrieve the stored token
