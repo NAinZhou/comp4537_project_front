@@ -1,3 +1,25 @@
+
+
+// Check if the user is authorized before making the API call
+function checkAuthorization() {
+  const token = localStorage.getItem("token"); // Retrieve the stored token
+  if (!token) {
+    window.location.href = "index.html"; // Redirect to index.html if token is not available
+  }
+}
+
+// Call the checkAuthorization function when the page loads
+window.onload = function () {
+  checkAuthorization();
+};
+
+function checkAuthorization() {
+  const token = localStorage.getItem("token"); // Retrieve the stored token
+  if (!token) {
+    window.location.href = "index.html"; // Redirect to index.html if token is not available
+  }
+}
+
 // Function to handle form submission for updating user information
 const updateUser = (userId, updatedUser) => {
   const token = localStorage.getItem("token"); // Retrieve the stored token
