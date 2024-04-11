@@ -2,7 +2,7 @@
 function checkAuthorization() {
   const token = localStorage.getItem("token"); // Retrieve the stored token
   if (!token) {
-  window.location.href = "index.html"; // Redirect to index.html if token is not available
+  window.location.href = "https://mycleintapiconsumer.netlify.app/"; // Redirect to index.html if token is not available
   }
   }
   
